@@ -4,7 +4,7 @@ env:
   terraform_version: 'latest'  
 on:
   repository_dispatch:
-    types: [build-event]
+    types: [Terraform-Build]
 jobs:
   build:
     name: Run Terraform
@@ -20,16 +20,16 @@ jobs:
           terraform_version: ${{ env.terraform_version }}
           terraform_wrapper: true
 
-      - name: Configure AWS credentials for Account
-        uses: aws-actions/configure-aws-credentials@v1
-        with:
-          aws-access-key-id: ${{ secrets.GH_AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.GH_AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ env.aws_region }}
-          role-to-assume: ci-account_name-${{ github.event.client_payload.sha }}
-          role-external-id: ${{ secrets.AWS_ROLE_EXTERNAL_ID }}
-          role-duration-seconds: 1200
-          role-session-name: GH-${{ env.GITHUB_WORKFLOW }}-${{ env.GITHUB_RUN_ID }}
+#       - name: Configure AWS credentials for Account
+#         uses: aws-actions/configure-aws-credentials@v1
+#         with:
+#           aws-access-key-id: ${{ secrets.GH_AWS_ACCESS_KEY_ID }}
+#           aws-secret-access-key: ${{ secrets.GH_AWS_SECRET_ACCESS_KEY }}
+#           aws-region: ${{ env.aws_region }}
+#           role-to-assume: ci-account_name-${{ github.event.client_payload.sha }}
+#           role-external-id: ${{ secrets.AWS_ROLE_EXTERNAL_ID }}
+#           role-duration-seconds: 1200
+#           role-session-name: GH-${{ env.GITHUB_WORKFLOW }}-${{ env.GITHUB_RUN_ID }}
 
       - name: Terraform Init
         id: init
