@@ -24,7 +24,7 @@ runs:
       id: init
       run: ls -la
       shell: bash
-      working-directory: "projects/test/terraform"
+      working-directory: "${{ inputs.terraform_path }}"
 
 #       - name: Configure AWS credentials for Account
 #         uses: aws-actions/configure-aws-credentials@v1
