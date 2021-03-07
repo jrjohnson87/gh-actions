@@ -1,14 +1,16 @@
 name: Test Project Dev
+env:
+  build_path: "projects/test"
 on:
   workflow_dispatch:
   push:
     branches: [ $default-branch ]
     paths:
-      - $terraform_path
+      - $build_path
   pull_request:
     branches: [ $default-branch ]
     paths:
-      - $terraform_path
+      - $build_path
 
 jobs:
   build:
@@ -21,5 +23,5 @@ jobs:
         terraform__state_s3_bucket_name: "my_state_bucket"
         aws_account: "dev_scratch"
         aws_iam_role: ""
-        terraform_path: "projects/test/terraform"
+        build_path: "{{ env.build_path }}"
         environment: "dev"
