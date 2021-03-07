@@ -5,14 +5,11 @@ inputs:
     description: 'AWS region to use'
     default: 'eu-west-2'
     required: true  
-  aws_s3_bucket:
-    description: 'S3 bucket to use for Terraform state'
+  terraform_state_key:
+    description: 'Key to use for Terraform state in S3 bucket'
     required: true
   aws_account:  
     description: 'AWS Account to deploy to'
-    required: true
-  aws_iam_role:
-    description: 'AWS IAM role to assume'
     required: true
   build_path:
     description: 'Build path that contains the source'
@@ -26,7 +23,7 @@ runs:
   steps:
     - name: Terraform Init
       id: init
-      run: terraform init -backend-config="region=${{ inputs.aws_region }}" -backend-config="bucket=${{ inputs.aws_s3_bucket }}" -backend-config="key=${{ inputs.environment }}/terraform.state"
+      run: terraform init -backend-config="region=${{ inputs.aws_region }}" -backend-config="bucket=terraform-state" -backend-config="key=${{ inputs.terraform_state_key }}/terraform.state"
       shell: bash
       working-directory: "${{ inputs.build_path }}/terraform"
 
