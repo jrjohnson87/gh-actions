@@ -1,10 +1,4 @@
 name: Test Project Dev
-env:
-  terraform__state_s3_bucket_name: "my_state_bucket"
-  aws_account: "dev_scratch"
-  aws_iam_role: ""
-  terraform_path: "projects/test/terraform"
-  environment: "dev"
 on:
   workflow_dispatch:
   push:
@@ -24,8 +18,8 @@ jobs:
     - uses: actions/checkout@v2
     - uses: ./.github/actions/aws-terraform
       with:
-        #aws_account: $aws_account
-        #aws_iam_role: $aws_iam_role
+        terraform__state_s3_bucket_name: "my_state_bucket"
+        aws_account: "dev_scratch"
+        aws_iam_role: ""
         terraform_path: $terraform_path
-        #terraform_path: "projects/test/terraform"
-        #environment: $environment
+        environment: "dev"
