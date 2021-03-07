@@ -3,25 +3,8 @@ env:
   aws_region: 'eu-west-2'
   terraform_version: 'latest'  
 on:
-  workflow_dispatch:
-    inputs:
-      terraform_project_path:
-        description: 'Terraform Project Path e.g. projects/academy/terraform'     
-        required: true
-    
-  push:
-    branches: [ $default-branch ]
-    paths:
-      - "modules/**"
-      - "platform/**"
-      - "projects/**"
-  pull_request:
-    branches: [ $default-branch ]
-    paths:
-      - "modules/**"
-      - "platform/**"
-      - "projects/**"
-
+  repository_dispatch:
+    types: [build-event]
 jobs:
   build:
     name: Run Terraform
