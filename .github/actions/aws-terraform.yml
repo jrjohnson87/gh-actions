@@ -1,19 +1,25 @@
 name: AWS Terraform
 description: Runs Terraform against HackneyAWS
 inputs:
-  terraform_version:  # id of input
+  terraform_version:
     description: 'Version of Terraform to use'
     required: true
     default: 'latest'
+  terraform__state_s3_bucket_name:  
+    description: 'S3 bucket name to use for Terraform state'
+    required: true
+  aws_account:  
+    description: 'AWS Account to deploy'
+    required: true        
+  aws_iam_role:  
+    description: 'AWS IAM role to assume'
+    required: true    
   terraform_path:  
     description: 'Path of Terraform to run'
     required: true
-  aws_account:  
-    description: 'AWS account to target'
+  environment:  
+    description: 'Name of the environemnt to target'
     required: true    
-  aws_iam_role_name:  
-    description: 'Environment to deploy to'
-    required: true
 
 runs:
   using: "composite"
