@@ -1,5 +1,5 @@
 
-name: Test Project AWS Terraform
+name: Test Project Dev Terraform Trigger
 
 on:
   workflow_dispatch:
