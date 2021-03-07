@@ -94,4 +94,4 @@ runs:
       run: terraform plan
       shell: bash
       working-directory: ${{ inputs.terraform_path }}      
-      if: contains('$default-branch', github.ref)
+      #if: contains('$default-branch', github.ref)
