@@ -22,12 +22,23 @@ runs:
       id: s3
       run: |
         echo "Checking if Terraform S3 Bucket s3://${{ inputs.terraform_state_s3_bucket }} exists"
-        if aws s3 ls "s3://${{ inputs.terraform_state_s3_bucket }}" 2>&1 | grep -q 'NoSuchBucket'
+        
+        bucketStatus=$(aws s3api head-bucket --bucket "${{ inputs.terraform_state_s3_bucket }}" 2>&1)
+
+        if echo "${bucketStatus}" | grep 'Not Found';
         then
           echo "Creating new Terraform S3 Bucket"
           aws s3api create-bucket --bucket ${{ inputs.terraform_state_s3_bucket }} --region ${{ inputs.aws_region }}
           echo "Sleeping 2 minutes for S3 Bucket to become availble"
-          sleep 2m
+          sleep 2m     
+        elif echo "${bucketStatus}" | grep 'Forbidden';
+        then
+          echo "Terraform S3 Bucket exists but not owned"
+        elif echo "${bucketStatus}" | grep 'Bad Request';
+        then
+          echo "Terraform S3 Bucket name specified is less than 3 or greater than 63 characters"
+        else
+          echo "OK: Terraform S3 Bucket exists and is owned";
         fi
       shell: bash
   
