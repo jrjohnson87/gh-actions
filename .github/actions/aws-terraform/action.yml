@@ -20,13 +20,10 @@ inputs:
 runs:
   using: "composite"
   steps:
-#     - name: Setup Terraform
-#       id: setup
-#       working-directory: ${{ inputs.terraform_path }}
-#       uses: hashicorp/setup-terraform@v1.2.1
-#       with:
-#         terraform_version: ${{ inputs.terraform_version }}
-#         terraform_wrapper: true
+    - name: Terraform Init
+      id: init
+      run: pwd
+      shell: bash
 
 #       - name: Configure AWS credentials for Account
 #         uses: aws-actions/configure-aws-credentials@v1
@@ -39,23 +36,23 @@ runs:
 #           role-duration-seconds: 1200
 #           role-session-name: GH-${{ env.GITHUB_WORKFLOW }}-${{ env.GITHUB_RUN_ID }}
 
-    - name: Terraform Init
-      id: init
-      run: terraform init
-      shell: bash
-      working-directory: "${{ github.workspace }}/${{ inputs.terraform_path }}"
+#     - name: Terraform Init
+#       id: init
+#       run: terraform init
+#       shell: bash
+#       working-directory: "${{ github.workspace }}/${{ inputs.terraform_path }}"
 
-    - name: Terraform Validate
-      id: validate
-      run: terraform validate -no-color
-      shell: bash
-      working-directory: "${{ github.workspace }}/${{ inputs.terraform_path }}"
+#     - name: Terraform Validate
+#       id: validate
+#       run: terraform validate -no-color
+#       shell: bash
+#       working-directory: "${{ github.workspace }}/${{ inputs.terraform_path }}"
 
-    - name: Terraform Plan
-      id: plan
-      run: terraform plan -no-color
-      shell: bash
-      working-directory: "${{ github.workspace }}/${{ inputs.terraform_path }}"    
+#     - name: Terraform Plan
+#       id: plan
+#       run: terraform plan -no-color
+#       shell: bash
+#       working-directory: "${{ github.workspace }}/${{ inputs.terraform_path }}"    
       #continue-on-error: true
 
 #     - uses: actions/github-script@0.9.0
@@ -85,10 +82,10 @@ runs:
 #             body: output
 #           })
 
-    - name: Terraform Apply
-      id: apply
-      run: terraform plan
-      shell: bash
-      working-directory: "${{ github.workspace }}/${{ inputs.terraform_path }}" 
+#     - name: Terraform Apply
+#       id: apply
+#       run: terraform plan
+#       shell: bash
+#       working-directory: "${{ github.workspace }}/${{ inputs.terraform_path }}" 
       #working-directory: ${{ inputs.terraform_path }}      
       #if: contains('$default-branch', github.ref)
