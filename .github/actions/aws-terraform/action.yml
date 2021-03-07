@@ -22,7 +22,7 @@ runs:
   steps:
     - name: Terraform Init
       id: init
-      run: pwd
+      run: ls -la
       shell: bash
 
 #       - name: Configure AWS credentials for Account
