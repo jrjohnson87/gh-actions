@@ -1,17 +1,21 @@
 name: AWS Terraform
 description: Runs Terraform against HackneyAWS
 inputs:
+  aws_region:
+    description: 'AWS region to use'
+    default: 'eu-west-2'
+    required: true  
   aws_s3_bucket:
     description: 'S3 bucket to use for Terraform state'
     required: true
   aws_account:  
-    description: 'AWS Account to deploy'
+    description: 'AWS Account to deploy to'
     required: true
   aws_iam_role:
     description: 'AWS IAM role to assume'
     required: true
   build_path:
-    description: 'Build path to run against'
+    description: 'Build path that contains the source'
     required: true
   environment:
     description: 'Name of the environemnt to target'
@@ -20,12 +24,6 @@ inputs:
 runs:
   using: "composite"
   steps:
-#     - name: Terraform Init
-#       id: init
-#       run: ls -la
-#       shell: bash
-#       working-directory: "${{ inputs.build_path }}"
-
 #       - name: Configure AWS credentials for Account
 #         uses: aws-actions/configure-aws-credentials@v1
 #         with:
@@ -39,7 +37,7 @@ runs:
 
     - name: Terraform Init
       id: init
-      run: terraform init
+      run: terraform init -backend-config="region=${{ inputs.aws_region }}" -backend-config="bucket=${{ inputs.aws_s3_bucket }}" -backend-config="key=${{ inputs.environment }}/terraform.state"
       shell: bash
       working-directory: "${{ inputs.build_path }}/terraform"
 
@@ -49,44 +47,14 @@ runs:
       shell: bash
       working-directory: "${{ inputs.build_path }}/terraform"
 
-#     - name: Terraform Plan
-#       id: plan
-#       run: terraform plan -no-color
-#       shell: bash
-#       working-directory: "${{ inputs.build_path }}""    
-      #continue-on-error: true
+    - name: Terraform Plan
+      id: plan
+      run: terraform plan -no-color
+      shell: bash
+      working-directory: "${{ inputs.build_path }}/terraform"   
 
-#     - uses: actions/github-script@0.9.0
-#       if: github.event_name == 'pull_request'
-#       env:
-#         PLAN: "terraform\n${{ steps.plan.outputs.stdout }}"
-#       with:
-#         github-token: ${{ secrets.GITHUB_TOKEN }}
-#         script: |
-#           const output = `#### Terraform Format and Style 🖌\`${{ steps.fmt.outcome }}\`
-#           #### Terraform Initialization ⚙️\`${{ steps.init.outcome }}\`
-#           #### Terraform Validation 🤖${{ steps.validate.outputs.stdout }}
-#           #### Terraform Plan 📖\`${{ steps.plan.outcome }}\`
-
-#           <details><summary>Show Plan</summary>
-
-#           \`\`\`${process.env.PLAN}\`\`\`
-
-#           </details>
-
-#           *Pusher: @${{ github.actor }}, Action: \`${{ github.event_name }}\`, Working Directory: \`${{ env.tf_actions_working_dir }}\`, Workflow: \`${{ github.workflow }}\`*`;
-
-#           github.issues.createComment({
-#             issue_number: context.issue.number,
-#             owner: context.repo.owner,
-#             repo: context.repo.repo,
-#             body: output
-#           })
-
-#     - name: Terraform Apply
-#       id: apply
-#       run: terraform plan
-#       shell: bash
-#       working-directory: "${{ inputs.build_path }}"
-      #working-directory: ${{ inputs.terraform_path }}      
-      #if: contains('$default-branch', github.ref)
+    - name: Terraform Apply
+      id: apply
+      run: terraform plan
+      shell: bash
+      working-directory: "${{ inputs.build_path }}/terraform"
