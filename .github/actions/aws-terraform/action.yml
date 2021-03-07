@@ -26,6 +26,8 @@ runs:
         then
           echo "Creating new Terraform S3 Bucket"
           aws s3api create-bucket --bucket ${{ inputs.terraform_state_s3_bucket }} --region ${{ inputs.aws_region }}
+          echo "Sleeping 2 minutes for S3 Bucket to become availble"
+          sleep 2m
         fi
       shell: bash
   
