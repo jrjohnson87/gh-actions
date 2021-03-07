@@ -1,24 +1,30 @@
 name: AWS Terraform
-env:
-  aws_region: 'eu-west-2'
-  terraform_version: 'latest'  
-on:
-  repository_dispatch:
-    types: [Terraform-Build]
-jobs:
-  build:
-    name: Run Terraform
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-        with:
-          ref: ${{ github.event.client_payload.sha }}
+description: Runs Terraform against HackneyAWS
+inputs:
+  terraform_version:  # id of input
+    description: 'Version of Terraform to use'
+    required: true
+    default: 'latest'
+  terraform_path:  
+    description: 'Path of Terraform to run'
+    required: true
+  aws_account:  
+    description: 'AWS account to target'
+    required: true    
+  aws_iam_role_name:  
+    description: 'Environment to deploy to'
+    required: true
 
-      - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v1.2.1
-        with:
-          terraform_version: ${{ env.terraform_version }}
-          terraform_wrapper: true
+runs:
+  using: "composite"
+  steps:
+    - uses: actions/checkout@v2
+
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v1.2.1
+      with:
+        terraform_version: ${{ inputs.terraform_version }}
+        terraform_wrapper: true
 
 #       - name: Configure AWS credentials for Account
 #         uses: aws-actions/configure-aws-credentials@v1
@@ -31,51 +37,50 @@ jobs:
 #           role-duration-seconds: 1200
 #           role-session-name: GH-${{ env.GITHUB_WORKFLOW }}-${{ env.GITHUB_RUN_ID }}
 
-      - name: Terraform Init
-        id: init
-        run: terraform init
+    - name: Terraform Init
+      id: init
+      run: terraform init
 
-      - name: Terraform Validate
-        id: validate
-        run: terraform validate -no-color
+    - name: Terraform Validate
+      id: validate
+      run: terraform validate -no-color
 
-      - name: Terraform Plan
-        id: plan
-        run: terraform plan -no-color
-        continue-on-error: true
+    - name: Terraform Plan
+      id: plan
+      run: terraform plan -no-color
+      continue-on-error: true
 
-      - uses: actions/github-script@0.9.0
-        if: github.event_name == 'pull_request'
-        env:
-          PLAN: "terraform\n${{ steps.plan.outputs.stdout }}"
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          script: |
-            const output = `#### Terraform Format and Style 🖌\`${{ steps.fmt.outcome }}\`
-            #### Terraform Initialization ⚙️\`${{ steps.init.outcome }}\`
-            #### Terraform Validation 🤖${{ steps.validate.outputs.stdout }}
-            #### Terraform Plan 📖\`${{ steps.plan.outcome }}\`
+    - uses: actions/github-script@0.9.0
+      if: github.event_name == 'pull_request'
+      env:
+        PLAN: "terraform\n${{ steps.plan.outputs.stdout }}"
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        script: |
+          const output = `#### Terraform Format and Style 🖌\`${{ steps.fmt.outcome }}\`
+          #### Terraform Initialization ⚙️\`${{ steps.init.outcome }}\`
+          #### Terraform Validation 🤖${{ steps.validate.outputs.stdout }}
+          #### Terraform Plan 📖\`${{ steps.plan.outcome }}\`
 
-            <details><summary>Show Plan</summary>
+          <details><summary>Show Plan</summary>
 
-            \`\`\`${process.env.PLAN}\`\`\`
+          \`\`\`${process.env.PLAN}\`\`\`
 
-            </details>
+          </details>
 
-            *Pusher: @${{ github.actor }}, Action: \`${{ github.event_name }}\`, Working Directory: \`${{ env.tf_actions_working_dir }}\`, Workflow: \`${{ github.workflow }}\`*`;
+          *Pusher: @${{ github.actor }}, Action: \`${{ github.event_name }}\`, Working Directory: \`${{ env.tf_actions_working_dir }}\`, Workflow: \`${{ github.workflow }}\`*`;
 
-            github.issues.createComment({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              body: output
-            })
-            
-      - name: Terraform Apply
-        id: apply
-        run: terraform plan
-        if:
-          contains('
-            $default-branch
-          ', github.ref)
-            
+          github.issues.createComment({
+            issue_number: context.issue.number,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            body: output
+          })
+
+    - name: Terraform Apply
+      id: apply
+      run: terraform plan
+      if:
+        contains('
+          $default-branch
+        ', github.ref)
