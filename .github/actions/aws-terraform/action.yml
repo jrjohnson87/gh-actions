@@ -24,13 +24,13 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - name: Setup Terraform
-      id: setup
-      working-directory: ${{ inputs.terraform_path }}
-      uses: hashicorp/setup-terraform@v1.2.1
-      with:
-        terraform_version: ${{ inputs.terraform_version }}
-        terraform_wrapper: true
+#     - name: Setup Terraform
+#       id: setup
+#       working-directory: ${{ inputs.terraform_path }}
+#       uses: hashicorp/setup-terraform@v1.2.1
+#       with:
+#         terraform_version: ${{ inputs.terraform_version }}
+#         terraform_wrapper: true
 
 #       - name: Configure AWS credentials for Account
 #         uses: aws-actions/configure-aws-credentials@v1
