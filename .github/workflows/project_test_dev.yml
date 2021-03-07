@@ -1,0 +1,25 @@
+name: Test Project Dev
+env:
+  # These should be the only things you need to change!
+  build_path: "projects/test"
+  deploy_env: "dev"
+on:
+  workflow_dispatch:
+  push:
+    branches: [ $default-branch ]
+    paths:
+      - $build_path
+  pull_request:
+    branches: [ $default-branch ]
+    paths:
+      - $build_path
+
+jobs:
+  trigger-build:
+    name: AWS Terraform Build
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - uses: ./.github/actions/aws_terraform
+      with:
+        who-to-greet: 'Mona the Octocat'    
