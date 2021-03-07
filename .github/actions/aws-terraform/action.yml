@@ -1,6 +1,6 @@
 name: AWS Terraform
 description: Runs Terraform against HackneyAWS
-inputs:
+#inputs:
 #   terraform__state_s3_bucket_name:  
 #     description: 'S3 bucket name to use for Terraform state'
 #     required: true
