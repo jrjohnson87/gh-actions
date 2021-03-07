@@ -21,7 +21,7 @@ runs:
     - name: Terraform S3 Bucket
       id: s3
       run: |
-        echo "Add Commands to Create S3 Bucket"
+        echo "Add Commands to Create S3 Bucket: ${{ inputs.terraform_state_s3_bucket }}"
       shell: bash
   
     - name: Terraform Init
