@@ -1,7 +1,8 @@
 name: Trigger Test Project Dev
 env:
-  # This should be the only thing you need to change!
+  # These should be the only things you need to change!
   build_path: "projects/test"
+  deploy_env: "dev"
 on:
   workflow_dispatch:
   push:
@@ -23,4 +24,4 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           event-type: build-event
-          client-payload: '{"ref": "${{ github.ref }}", "sha": "${{ github.sha }}", "build_path": "${{ env.build_path }}", "event_name": "$GITHUB_EVENT_NAME", "trigger_workflow": "$GITHUB_WORKFLOW" }'
+          client-payload: '{"ref": "${{ github.ref }}", "sha": "${{ github.sha }}", "build_path": "${{ env.build_path }}", "deploy_env": "${{ env.deploy_env }}" }'
