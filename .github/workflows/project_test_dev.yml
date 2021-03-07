@@ -1,6 +1,7 @@
 name: Test Project Dev
 env:
-  aws_account: ""
+  terraform__state_s3_bucket_name: "my_state_bucket"
+  aws_account: "dev_scratch"
   aws_iam_role: ""
   terraform_path: "projects/test"
   environment: "dev"
