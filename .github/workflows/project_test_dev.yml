@@ -1,8 +1,8 @@
 name: Test Project DevScratch
 env:
   aws_region: "eu-west-2"
-  aws_s3_bucket: "test-project"
-  aws_account: "937934410339"
+  aws_account: ${{ secrets.AWS_ACCOUNT_DEVSCRATCH }}
+  terraform_state_key: "test-project"  
   build_path: "projects/test"
   environment: "dev"
   
@@ -35,6 +35,6 @@ jobs:
       uses: ./.github/actions/aws-terraform
       with:
         aws_region: ${{ env.aws_region }}
-        aws_s3_bucket: ${{ env.aws_s3_bucket }}
+        terraform_state_key: ${{ env.terraform_state_key }}
         build_path: ${{ env.build_path }}
         environment: ${{ env.environment }}
