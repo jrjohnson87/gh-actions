@@ -45,17 +45,20 @@ runs:
 
     - name: Terraform Init
       id: init
-      shell: terraform init
+      run: terraform init
+      shell: bash
       working-directory: ${{ inputs.terraform_path }}
 
     - name: Terraform Validate
       id: validate
-      shell: terraform validate -no-color
+      run: terraform validate -no-color
+      shell: bash
       working-directory: ${{ inputs.terraform_path }}
 
     - name: Terraform Plan
       id: plan
-      shell: terraform plan -no-color
+      run: terraform plan -no-color
+      shell: bash
       working-directory: ${{ inputs.terraform_path }}      
       #continue-on-error: true
 
@@ -88,6 +91,7 @@ runs:
 
     - name: Terraform Apply
       id: apply
-      shell: terraform plan
+      run: terraform plan
+      shell: bash
       working-directory: ${{ inputs.terraform_path }}      
       if: contains('$default-branch', github.ref)
