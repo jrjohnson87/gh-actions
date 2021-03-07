@@ -21,8 +21,6 @@ runs:
     - name: Terraform S3 Bucket
       id: s3
       run: |
-        set -e
-        bucketStatus=$(aws s3api head-bucket --bucket "${{ inputs.terraform_state_s3_bucket }}" 2>&1)
         echo "S3 Bucket: $bucketStatus"
       shell: bash
   
