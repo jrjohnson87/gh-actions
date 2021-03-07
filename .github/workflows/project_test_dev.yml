@@ -1,10 +1,10 @@
 name: Test Project Dev
 env:
-  aws_s3_bucket: ""
+  aws_s3_bucket: "test-bucket"
   aws_account: ""
   aws_iam_role: ""
   build_path: "projects/test"
-  environment: ""
+  environment: "dev"
   
 on:
   workflow_dispatch:
