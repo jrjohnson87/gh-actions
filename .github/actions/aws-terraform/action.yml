@@ -24,28 +24,6 @@ runs:
         set -e
         bucketStatus=$(aws s3api head-bucket --bucket "${{ inputs.terraform_state_s3_bucket }}" 2>&1)
         echo "S3 Bucket: $bucketStatus"
-        aws s3api create-bucket --bucket ${{ inputs.terraform_state_s3_bucket }} --region ${{ inputs.aws_region }} --grant-write --acl private
-
-        if echo "${bucketStatus}" | grep 'Not Found';
-        then
-          echo "Creating new Terraform S3 Bucket"
-          aws s3api create-bucket --bucket ${{ inputs.terraform_state_s3_bucket }} --region ${{ inputs.aws_region }}
-          
-          aws s3api put-object-lock-configuration \
-          --bucket my-bucket-with-object-lock \
-          --object-lock-configuration '{ "ObjectLockEnabled": "Enabled", "Rule": { "DefaultRetention": { "Mode": "COMPLIANCE", "Days": 50 }}}'
-          
-          echo "Sleeping 2 minutes for S3 Bucket to become availble"
-          sleep 2m     
-        elif echo "${bucketStatus}" | grep 'Forbidden';
-        then
-          echo "Terraform S3 Bucket exists but not owned"
-        elif echo "${bucketStatus}" | grep 'Bad Request';
-        then
-          echo "Terraform S3 Bucket name specified is less than 3 or greater than 63 characters"
-        else
-          echo "OK: Terraform S3 Bucket exists and is owned";
-        fi
       shell: bash
   
     - name: Terraform Init
