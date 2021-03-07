@@ -8,9 +8,6 @@ inputs:
   terraform_state_s3_bucket:
     description: 'S3 bucket for Terraform state'
     required: true
-  aws_account:  
-    description: 'AWS Account to deploy to'
-    required: true
   build_path:
     description: 'Build path that contains the source'
     required: true
@@ -21,11 +18,13 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - name: Check if Terraform S3 Bucket Exists
+    - name: Terraform S3 Bucket
       id: s3
       run: |
+        echo "Checking if Terraform S3 Bucket s3://${{ inputs.terraform_state_s3_bucket }} exists"
         if aws s3 ls "s3://${{ inputs.terraform_state_s3_bucket }}" 2>&1 | grep -q 'NoSuchBucket'
         then
+          echo "Creating new Terraform S3 Bucket"
           aws s3api create-bucket --bucket ${{ inputs.terraform_state_s3_bucket }} --region ${{ inputs.aws_region }}
         fi
       shell: bash
