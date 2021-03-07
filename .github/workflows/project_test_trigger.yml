@@ -23,4 +23,4 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           event-type: build-event
-          client-payload: '{"ref": "${{ github.ref }}", "sha": "${{ github.sha }}", "build_path": "${{ env.build_path }}", "event_name": "${{ env.GITHUB_EVENT_NAME }}", "trigger_workflow": "${{ env.GITHUB_WORKFLOW }}" }'
+          client-payload: '{"ref": "${{ github.ref }}", "sha": "${{ github.sha }}", "build_path": "${{ env.build_path }}", "event_name": "$GITHUB_EVENT_NAME", "trigger_workflow": "$GITHUB_WORKFLOW" }'
