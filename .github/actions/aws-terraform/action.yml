@@ -21,6 +21,15 @@ inputs:
 runs:
   using: "composite"
   steps:
+    - name: Check if Terraform S3 Bucket Exists
+      id: s3
+      run: |
+        if aws s3 ls "s3://${{ inputs.terraform_state_s3_bucket }}" 2>&1 | grep -q 'NoSuchBucket'
+        then
+          aws s3api create-bucket --bucket ${{ inputs.terraform_state_s3_bucket }} --region ${{ inputs.aws_region }}
+        fi
+      shell: bash
+  
     - name: Terraform Init
       id: init
       run: terraform init -backend-config="region=${{ inputs.aws_region }}" -backend-config="bucket=${{ inputs.terraform_state_s3_bucket }}" -backend-config="key=${{ inputs.environment }}/terraform.state"
