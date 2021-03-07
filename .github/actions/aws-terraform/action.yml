@@ -43,19 +43,19 @@ runs:
       id: init
       run: terraform init
       shell: bash
-      working-directory: ${{ inputs.terraform_path }}
+      working-directory: "${{ github.workspace }}/${{ inputs.terraform_path }}"
 
     - name: Terraform Validate
       id: validate
       run: terraform validate -no-color
       shell: bash
-      working-directory: ${{ inputs.terraform_path }}
+      working-directory: "${{ github.workspace }}/${{ inputs.terraform_path }}"
 
     - name: Terraform Plan
       id: plan
       run: terraform plan -no-color
       shell: bash
-      working-directory: ${{ inputs.terraform_path }}      
+      working-directory: "${{ github.workspace }}/${{ inputs.terraform_path }}"    
       #continue-on-error: true
 
 #     - uses: actions/github-script@0.9.0
@@ -89,5 +89,6 @@ runs:
       id: apply
       run: terraform plan
       shell: bash
-      working-directory: ${{ inputs.terraform_path }}      
+      working-directory: "${{ github.workspace }}/${{ inputs.terraform_path }}" 
+      #working-directory: ${{ inputs.terraform_path }}      
       #if: contains('$default-branch', github.ref)
