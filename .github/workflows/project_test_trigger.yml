@@ -1,19 +1,20 @@
-
-name: Test Project Dev Terraform Trigger
-
+name: Trigger Test Project Dev
+env:
+  # This should be the only thing you need to change!
+  build_path: "projects/test"
 on:
   workflow_dispatch:
   push:
     branches: [ $default-branch ]
     paths:
-      - "projects/test"
+      - ${{ env.build_path }}
   pull_request:
     branches: [ $default-branch ]
     paths:
-      - "projects/test"
+      - ${{ env.build_path }}
 
 jobs:
-  build:
+  trigger-build:
     name: Trigger AWS Terraform Build
     runs-on: ubuntu-latest
     steps:
@@ -22,4 +23,4 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           event-type: build-event
-          client-payload: '{"ref": "${{ github.ref }}", "sha": "${{ github.sha }}"}'
+          client-payload: '{"ref": "${{ github.ref }}", "sha": "${{ github.sha }}", "build_path": "${{ env.build_path }}", "event_name": "${{ env.GITHUB_EVENT_NAME }}", "trigger_workflow": "${{ env.GITHUB_WORKFLOW }}" }'
