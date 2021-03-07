@@ -37,17 +37,17 @@ runs:
 #           role-duration-seconds: 1200
 #           role-session-name: GH-${{ env.GITHUB_WORKFLOW }}-${{ env.GITHUB_RUN_ID }}
 
-#     - name: Terraform Init
-#       id: init
-#       run: terraform init
-#       shell: bash
-#       working-directory: "${{ inputs.build_path }}"
+    - name: Terraform Init
+      id: init
+      run: terraform init
+      shell: bash
+      working-directory: "${{ inputs.build_path }}/terraform"
 
-#     - name: Terraform Validate
-#       id: validate
-#       run: terraform validate -no-color
-#       shell: bash
-#       working-directory: "${{ inputs.build_path }}"
+    - name: Terraform Validate
+      id: validate
+      run: terraform validate -no-color
+      shell: bash
+      working-directory: "${{ inputs.build_path }}/terraform"
 
 #     - name: Terraform Plan
 #       id: plan
