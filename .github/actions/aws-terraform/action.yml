@@ -21,8 +21,7 @@ runs:
     - name: Terraform S3 Bucket
       id: s3
       run: |
-        echo "S3 Bucket: $bucketStatus"
-        aws s3api create-bucket --bucket ${{ inputs.terraform_state_s3_bucket }} --region ${{ inputs.aws_region }} --acl private
+        echo "Add Commands to Create S3 Bucket"
       shell: bash
   
     - name: Terraform Init
