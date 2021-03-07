@@ -21,7 +21,7 @@ runs:
     - name: Terraform S3 Bucket
       id: s3
       run: |
-        aws s3api head-bucket --bucket "${{ inputs.terraform_state_s3_bucket }}
+        aws s3api head-bucket --bucket "${{ inputs.terraform_state_s3_bucket }}"
 
         echo "Checking if Terraform S3 Bucket s3://${{ inputs.terraform_state_s3_bucket }} exists"
         
