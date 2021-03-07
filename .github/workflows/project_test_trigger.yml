@@ -1,4 +1,4 @@
-name: Trigger Test Project Dev
+name: Test Project Dev
 env:
   # These should be the only things you need to change!
   build_path: "projects/test"
@@ -16,12 +16,14 @@ on:
 
 jobs:
   trigger-build:
-    name: Trigger AWS Terraform Build
+    name: AWS Terraform Build
     runs-on: ubuntu-latest
     steps:
-      - name: Repository Dispatch
-        uses: peter-evans/repository-dispatch@v1
-        with:
-          token: ${{ secrets.TRIGGER_PAT }}
-          event-type: Terraform-Build
-          client-payload: '{"ref": "${{ github.ref }}", "sha": "${{ github.sha }}", "build_path": "${{ env.build_path }}", "deploy_env": "${{ env.deploy_env }}" }'
+      - uses: ./.github/workflows/aws_terraform.yml
+
+#       - name: Repository Dispatch
+#         uses: peter-evans/repository-dispatch@v1
+#         with:
+#           token: ${{ secrets.TRIGGER_PAT }}
+#           event-type: Terraform-Build
+#           client-payload: '{"ref": "${{ github.ref }}", "sha": "${{ github.sha }}", "build_path": "${{ env.build_path }}", "deploy_env": "${{ env.deploy_env }}" }'
