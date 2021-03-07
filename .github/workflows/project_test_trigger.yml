@@ -7,11 +7,11 @@ on:
   push:
     branches: [ $default-branch ]
     paths:
-      - ${{ env.build_path }}
+      - $build_path
   pull_request:
     branches: [ $default-branch ]
     paths:
-      - ${{ env.build_path }}
+      - $build_path
 
 jobs:
   trigger-build:
