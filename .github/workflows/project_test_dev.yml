@@ -3,7 +3,7 @@ env:
   terraform__state_s3_bucket_name: "my_state_bucket"
   aws_account: "dev_scratch"
   aws_iam_role: ""
-  terraform_path: "projects/test/terraform"
+  terraform_path: "./projects/test/terraform"
   environment: "dev"
 on:
   workflow_dispatch:
