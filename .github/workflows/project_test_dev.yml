@@ -1,5 +1,6 @@
 name: Test Project Dev
 env:
+  aws_region: "eu-west-2"
   aws_s3_bucket: "test-bucket"
   aws_account: ""
   aws_iam_role: ""
@@ -22,11 +23,20 @@ jobs:
     name: AWS Terraform
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
-    - uses: ./.github/actions/aws-terraform
+    - name: Checkout Source
+      uses: actions/checkout@v2
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v1
       with:
-        aws_s3_bucket: "${{ env.aws_s3_bucket }}"
-        aws_account: "${{ env.aws_account }}"
-        aws_iam_role: "${{ env.aws_iam_role }}"
-        build_path: "${{ env.build_path }}"
-        environment: "${{ env.environment }}"
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ${{ env.aws_region }}
+    - name: Run AWS Terraform
+      uses: ./.github/actions/aws-terraform
+      with:
+        aws_region: ${{ env.aws_region }}
+        aws_s3_bucket: ${{ env.aws_s3_bucket }}
+        aws_account: ${{ env.aws_account }}
+        aws_iam_role: ${{ env.aws_iam_role }}
+        build_path: ${{ env.build_path }}
+        environment: ${{ env.environment }}
