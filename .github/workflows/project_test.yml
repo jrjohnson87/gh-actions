@@ -1,0 +1,25 @@
+
+name: Test Project AWS Terraform
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ $default-branch ]
+    paths:
+      - "projects/test"
+  pull_request:
+    branches: [ $default-branch ]
+    paths:
+      - "projects/test"
+
+jobs:
+  build:
+    name: Trigger Terraform Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Repository Dispatch
+        uses: peter-evans/repository-dispatch@v1
+        with:
+          token: ${{ secrets.REPO_ACCESS_TOKEN }}
+          event-type: build-event
+          client-payload: '{"ref": "${{ github.ref }}", "sha": "${{ github.sha }}"}'
