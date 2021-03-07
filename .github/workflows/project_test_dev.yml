@@ -23,5 +23,5 @@ jobs:
         terraform__state_s3_bucket_name: "my_state_bucket"
         aws_account: "dev_scratch"
         aws_iam_role: ""
-        build_path: "{{ env.build_path }}"
+        build_path: $build_path
         environment: "dev"
