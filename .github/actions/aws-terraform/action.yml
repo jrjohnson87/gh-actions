@@ -21,6 +21,7 @@ runs:
     - name: Terraform S3 Bucket
       id: s3
       run: |
+        set -e
         bucketStatus=$(aws s3api head-bucket --bucket "${{ inputs.terraform_state_s3_bucket }}" 2>&1)
         echo "S3 Bucket: $bucketStatus"
         aws s3api create-bucket --bucket ${{ inputs.terraform_state_s3_bucket }} --region ${{ inputs.aws_region }} --grant-write --acl private
@@ -46,7 +47,6 @@ runs:
           echo "OK: Terraform S3 Bucket exists and is owned";
         fi
       shell: bash
-      continue-on-error: true
   
     - name: Terraform Init
       id: init
